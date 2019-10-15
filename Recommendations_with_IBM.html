@@ -14116,28 +14116,21 @@ Your top_20 looks like the solution list! Nice job.
 <div class="prompt input_prompt">In&nbsp;[18]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">cosine_similarity</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">):</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">calc_similarity</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">):</span>
     <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">    INPUT:</span>
-<span class="sd">    a, b - (pandas Series) a pair of vectors in the form of pandas series</span>
+<span class="sd">    a, b - (pandas Series) a pair of vectors</span>
 <span class="sd">    </span>
 <span class="sd">    OUTPUT:</span>
-<span class="sd">    cos - (float) cosine similarity for given users</span>
+<span class="sd">    sim - (int) similarity for given users</span>
 <span class="sd">    </span>
 <span class="sd">    Description:</span>
-<span class="sd">    Return the cosine similarity of given pair of vectors    </span>
+<span class="sd">    Return the similarity of given pair of vectors    </span>
 <span class="sd">    &#39;&#39;&#39;</span>
-    <span class="c1"># convert to vectors</span>
-    <span class="n">a</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">a</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="n">a</span><span class="p">))</span>
-    <span class="n">b</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">b</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">b</span><span class="p">),</span> <span class="mi">1</span><span class="p">)</span>
-
-    <span class="c1"># manually compute cosine similarity</span>
-    <span class="n">dot</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span>
-    <span class="n">norma</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
-    <span class="n">normb</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">b</span><span class="p">)</span>
-    <span class="n">cos</span> <span class="o">=</span> <span class="n">dot</span> <span class="o">/</span> <span class="p">(</span><span class="n">norma</span> <span class="o">*</span> <span class="n">normb</span><span class="p">)</span>
+    <span class="c1"># manually compute dot similarity</span>
+    <span class="n">sim</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span>
     
-    <span class="k">return</span> <span class="n">cos</span>
+    <span class="k">return</span> <span class="n">sim</span>
 </pre></div>
 
     </div>
@@ -14169,7 +14162,7 @@ Your top_20 looks like the solution list! Nice job.
     <span class="c1"># compute similarity of each user to the provided user</span>
     <span class="n">similarities</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">index</span><span class="o">=</span><span class="n">user_item</span><span class="o">.</span><span class="n">index</span><span class="p">)</span>
     <span class="k">for</span> <span class="n">a_user_id</span><span class="p">,</span> <span class="n">a_user_vec</span> <span class="ow">in</span> <span class="n">user_item</span><span class="o">.</span><span class="n">iterrows</span><span class="p">():</span>
-        <span class="n">similarities</span><span class="p">[</span><span class="n">a_user_id</span><span class="p">]</span> <span class="o">=</span> <span class="n">cosine_similarity</span><span class="p">(</span><span class="n">user_item</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">user_id</span><span class="p">],</span> <span class="n">a_user_vec</span><span class="p">)</span>
+        <span class="n">similarities</span><span class="p">[</span><span class="n">a_user_id</span><span class="p">]</span> <span class="o">=</span> <span class="n">calc_similarity</span><span class="p">(</span><span class="n">user_item</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">user_id</span><span class="p">],</span> <span class="n">a_user_vec</span><span class="p">)</span>
 
     <span class="c1"># sort by similarity</span>
     <span class="n">similarities</span> <span class="o">=</span> <span class="n">similarities</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="n">ascending</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
@@ -14210,9 +14203,9 @@ Your top_20 looks like the solution list! Nice job.
 
 
 <div class="output_subarea output_stream output_stdout output_text">
-<pre>The 10 most similar users to user 1 are: [3933, 4201, 46, 5034, 824, 253, 5041, 2305, 136, 395]
-The 5 most similar users to user 3933 are: [1, 46, 4201, 824, 253]
-The 3 most similar users to user 46 are: [4201, 790, 5077]
+<pre>The 10 most similar users to user 1 are: [3933, 23, 3782, 203, 4459, 131, 3870, 46, 4201, 5041]
+The 5 most similar users to user 3933 are: [1, 23, 3782, 4459, 203]
+The 3 most similar users to user 46 are: [4201, 23, 3782]
 </pre>
 </div>
 </div>
@@ -14345,16 +14338,16 @@ The 3 most similar users to user 46 are: [4201, 790, 5077]
 
 
 <div class="output_text output_subarea output_execute_result">
-<pre>[&#39;predicting churn with the spss random tree algorithm&#39;,
- &#39;analyze open data sets with pandas dataframes&#39;,
- &#39;leverage python, scikit, and text classification for behavioral profiling&#39;,
+<pre>[&#39;dsx: hybrid mode&#39;,
+ &#39;data science for real-time streaming analytics&#39;,
  &#39;model bike sharing data with spss&#39;,
- &#39;ml algorithm != learning machine&#39;,
- &#39;improving the roi of big data and analytics through leveraging new sources of data&#39;,
- &#39;this week in data science (may 2, 2017)&#39;,
- &#39;using apply, sapply, lapply in r&#39;,
- &#39;how can data scientists collaborate to build better business&#39;,
- &#39;do i need to learn r?&#39;]</pre>
+ &#39;learn tensorflow and deep learning together and now!&#39;,
+ &#39;use decision optimization to schedule league games&#39;,
+ &#39;shaping data with ibm data refinery&#39;,
+ &#39;spark-based machine learning tools for capturing word meanings&#39;,
+ &#39;flightpredict ii: the sequel  – ibm watson data lab&#39;,
+ &#39;airbnb data for analytics: vancouver listings&#39;,
+ &#39;54174    detect potentially malfunctioning sensors in r...\nName: title, dtype: object&#39;]</pre>
 </div>
 
 </div>
@@ -14442,7 +14435,7 @@ The 3 most similar users to user 46 are: [4201, 790, 5077]
     <span class="c1"># compute similarity of each user to the provided user from user_item</span>
     <span class="n">similarities</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">index</span><span class="o">=</span><span class="n">user_item</span><span class="o">.</span><span class="n">index</span><span class="p">)</span>
     <span class="k">for</span> <span class="n">a_user_id</span><span class="p">,</span> <span class="n">a_user_vec</span> <span class="ow">in</span> <span class="n">user_item</span><span class="o">.</span><span class="n">iterrows</span><span class="p">():</span>
-        <span class="n">similarities</span><span class="p">[</span><span class="n">a_user_id</span><span class="p">]</span> <span class="o">=</span> <span class="n">cosine_similarity</span><span class="p">(</span><span class="n">user_item</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">user_id</span><span class="p">],</span> <span class="n">a_user_vec</span><span class="p">)</span>
+        <span class="n">similarities</span><span class="p">[</span><span class="n">a_user_id</span><span class="p">]</span> <span class="o">=</span> <span class="n">calc_similarity</span><span class="p">(</span><span class="n">user_item</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">user_id</span><span class="p">],</span> <span class="n">a_user_vec</span><span class="p">)</span>
     
     <span class="c1"># calculate the number of interactions of each user from df</span>
     <span class="n">interactions</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s1">&#39;user_id&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">count</span><span class="p">()[</span><span class="s1">&#39;article_id&#39;</span><span class="p">]</span>
@@ -14538,9 +14531,8 @@ The 3 most similar users to user 46 are: [4201, 790, 5077]
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">recs</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="n">m</span><span class="p">:</span>
             <span class="k">break</span>
     
-    <span class="n">rec_names</span> <span class="o">=</span> <span class="n">get_article_names</span><span class="p">(</span><span class="n">recs</span><span class="p">)</span>
-    
     <span class="n">recs</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">recs</span><span class="p">)[:</span><span class="n">m</span><span class="p">]</span>
+    <span class="n">rec_names</span> <span class="o">=</span> <span class="n">get_article_names</span><span class="p">(</span><span class="n">recs</span><span class="p">)</span>
     
     <span class="k">return</span> <span class="n">recs</span><span class="p">,</span> <span class="n">rec_names</span>
 </pre></div>
@@ -14579,10 +14571,10 @@ The 3 most similar users to user 46 are: [4201, 790, 5077]
 
 <div class="output_subarea output_stream output_stdout output_text">
 <pre>The top 10 recommendations for user 20 are the following article ids:
-[&#39;1185.0&#39;, &#39;1328.0&#39;, &#39;1162.0&#39;, &#39;1293.0&#39;, &#39;1165.0&#39;, &#39;254.0&#39;, &#39;40.0&#39;, &#39;1402.0&#39;, &#39;1410.0&#39;, &#39;1271.0&#39;]
+[&#39;730.0&#39;, &#39;205.0&#39;, &#39;362.0&#39;, &#39;1409.0&#39;, &#39;1324.0&#39;, &#39;142.0&#39;, &#39;1420.0&#39;, &#39;1356.0&#39;, &#39;1296.0&#39;, &#39;1170.0&#39;]
 
 The top 10 recommendations for user 20 are the following article names:
-[&#39;classify tumors with machine learning&#39;, &#39;analyze energy consumption in buildings&#39;, &#39;uci: sms spam collection&#39;, &#39;income (2015): united states demographic measures&#39;, &#39;analyze precipitation data&#39;, &#39;finding optimal locations of new store using decision optimization&#39;, &#39;uci: adult - predict income&#39;, &#39;customer demographics and sales&#39;, &#39;ensemble learning to improve machine learning results&#39;, &#39;apple, ibm add machine learning to partnership with watson-core ml coupling&#39;]
+[&#39;apache spark lab, part 1: basic concepts&#39;, &#39;dsx: hybrid mode&#39;, &#39;ibm watson facebook posts for 2015&#39;, &#39;use apache systemml and spark for machine learning&#39;, &#39;developing for the ibm streaming analytics service&#39;, &#39;fortune 100 companies&#39;, &#34;a beginner&#39;s guide to variational methods&#34;, &#39;occupation (2015): united states demographic measures&#39;, &#39;neural networks for beginners: popular types and applications&#39;, &#39;uci: red wine quality&#39;]
 </pre>
 </div>
 </div>
@@ -14607,7 +14599,7 @@ The top 10 recommendations for user 20 are the following article names:
 <div class=" highlight hl-ipython3"><pre><span></span><span class="c1">### Tests with a dictionary of results</span>
 
 <span class="n">user1_most_sim</span> <span class="o">=</span> <span class="n">get_top_sorted_users</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">tolist</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span>
-<span class="n">user131_10th_sim</span> <span class="o">=</span> <span class="n">get_top_sorted_users</span><span class="p">(</span><span class="mi">131</span><span class="p">)</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">tolist</span><span class="p">()[</span><span class="mi">7</span><span class="p">]</span>
+<span class="n">user131_10th_sim</span> <span class="o">=</span> <span class="n">get_top_sorted_users</span><span class="p">(</span><span class="mi">131</span><span class="p">)</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">tolist</span><span class="p">()[</span><span class="mi">9</span><span class="p">]</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;The user that is most similar to user 1 : </span><span class="si">{user1_most_sim}</span><span class="s1">&#39;</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;The user that is the 10th most similar to user 131: </span><span class="si">{user131_10th_sim}</span><span class="s1">&#39;</span><span class="p">)</span>
 </pre></div>
@@ -15375,8 +15367,18 @@ The user that is the 10th most similar to user 131: 242
 <div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># Use these cells to see how well you can use the training </span>
 <span class="c1"># decomposition to predict on test data</span>
 
-<span class="k">def</span> <span class="nf">predict_user_item</span><span class="p">(</span><span class="n">k</span><span class="p">):</span>
-    
+<span class="k">def</span> <span class="nf">predict_user_item</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">user_item_test</span><span class="o">=</span><span class="n">user_item_test</span><span class="p">,</span> <span class="n">valid_users</span><span class="o">=</span><span class="n">valid_idx</span><span class="p">,</span> <span class="n">valid_items</span><span class="o">=</span><span class="n">valid_arts</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    INPUT:</span>
+<span class="sd">    k - the number of latent features</span>
+<span class="sd">    user_item_test - a user-item matrix of the testing dataframe </span>
+<span class="sd">                    (unique users for each row and unique articles for each column)</span>
+<span class="sd">    </span>
+<span class="sd">    OUTPUT:</span>
+<span class="sd">    user_item_est - a user-item matrix estimated from k latent features</span>
+<span class="sd">    train_err - total error between user_item_est and user_item_train</span>
+<span class="sd">    val_err - total error between user_item_est and user_item_test</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># restructure with k latent features</span>
     <span class="n">s_new</span><span class="p">,</span> <span class="n">u_new</span><span class="p">,</span> <span class="n">vt_new</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">diag</span><span class="p">(</span><span class="n">s_train</span><span class="p">[:</span><span class="n">k</span><span class="p">]),</span> <span class="n">u_train</span><span class="p">[:,</span> <span class="p">:</span><span class="n">k</span><span class="p">],</span> <span class="n">vt_train</span><span class="p">[:</span><span class="n">k</span><span class="p">,</span> <span class="p">:]</span>
     
@@ -15512,6 +15514,141 @@ k:29 	 train_err:160.0 	 val_err:270.0
 
 </div>
 </div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[42]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">validation_comparison</span><span class="p">(</span><span class="n">df_valid</span><span class="p">,</span> <span class="n">k</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    INPUT:</span>
+<span class="sd">    df_valid - validation dataframe</span>
+<span class="sd">    k - the number of latent features</span>
+<span class="sd">        </span>
+<span class="sd">    OUTPUT:</span>
+<span class="sd">    err - totol error of how far off each value is from it&#39;s predicted value</span>
+<span class="sd">    accs - prediction accuracy (percent of matched articles)</span>
+<span class="sd">    preds - a list of predicted articles for each user</span>
+<span class="sd">    acts - a list of actually viewed articles for each user</span>
+<span class="sd">    matches - a list of matched articles for each user</span>
+<span class="sd">    valid_users - users we can make predictions for</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="c1"># create user-item matrix of the validation dataframe</span>
+    <span class="n">user_item_valid</span> <span class="o">=</span> <span class="n">create_user_item_matrix</span><span class="p">(</span><span class="n">df_valid</span><span class="p">)</span>
+    
+    <span class="c1"># users we can make predictions for</span>
+    <span class="n">valid_users</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">user_item_train</span><span class="o">.</span><span class="n">index</span><span class="p">)</span> <span class="o">&amp;</span> <span class="nb">set</span><span class="p">(</span><span class="n">user_item_valid</span><span class="o">.</span><span class="n">index</span><span class="p">)))</span>
+
+    <span class="c1"># articles we can make predictions for</span>
+    <span class="n">valid_items</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">user_item_train</span><span class="o">.</span><span class="n">columns</span><span class="p">)</span> <span class="o">&amp;</span> <span class="nb">set</span><span class="p">(</span><span class="n">user_item_valid</span><span class="o">.</span><span class="n">columns</span><span class="p">)))</span>
+    
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">valid_users</span><span class="p">)</span><span class="o">==</span><span class="mi">0</span> <span class="ow">or</span> <span class="nb">len</span><span class="p">(</span><span class="n">valid_items</span><span class="p">)</span><span class="o">==</span><span class="mi">0</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;no common users/items between training set and validation set.&#39;</span><span class="p">)</span>
+        <span class="k">return</span>
+    
+    <span class="n">user_item_est</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">err</span> <span class="o">=</span> <span class="n">predict_user_item</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">user_item_valid</span><span class="p">,</span> <span class="n">valid_users</span><span class="p">,</span> <span class="n">valid_items</span><span class="p">)</span>
+    
+    <span class="n">preds</span><span class="p">,</span> <span class="n">acts</span><span class="p">,</span> <span class="n">matches</span><span class="p">,</span> <span class="n">accs</span> <span class="o">=</span> <span class="p">[],</span> <span class="p">[],</span> <span class="p">[],</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">user_id</span> <span class="ow">in</span> <span class="n">valid_users</span><span class="p">:</span>
+        <span class="n">_</span><span class="p">,</span> <span class="n">pred</span> <span class="o">=</span> <span class="n">get_user_articles</span><span class="p">(</span><span class="n">user_id</span><span class="p">,</span> <span class="n">user_item_est</span><span class="p">)</span>
+        <span class="n">_</span><span class="p">,</span> <span class="n">act</span> <span class="o">=</span> <span class="n">get_user_articles</span><span class="p">(</span><span class="n">user_id</span><span class="p">,</span> <span class="n">user_item_train</span><span class="p">)</span>
+        
+        <span class="n">match</span> <span class="o">=</span> <span class="p">[</span><span class="n">item</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">pred</span> <span class="k">if</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">act</span><span class="p">]</span>
+        <span class="n">acc</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">match</span><span class="p">)</span><span class="o">/</span><span class="nb">len</span><span class="p">(</span><span class="n">act</span><span class="p">)</span>
+        
+        <span class="n">preds</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">pred</span><span class="p">)</span>
+        <span class="n">acts</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">act</span><span class="p">)</span>
+        
+        <span class="n">matches</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">match</span><span class="p">)</span>
+        <span class="n">accs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">acc</span><span class="p">)</span>
+        
+    <span class="k">return</span> <span class="n">err</span><span class="p">,</span> <span class="n">matches</span><span class="p">,</span> <span class="n">accs</span><span class="p">,</span> <span class="n">preds</span><span class="p">,</span> <span class="n">acts</span><span class="p">,</span> <span class="n">valid_users</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[43]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">k</span> <span class="o">=</span> <span class="mi">4</span>
+<span class="n">err</span><span class="p">,</span> <span class="n">matches</span><span class="p">,</span> <span class="n">accs</span><span class="p">,</span> <span class="n">preds</span><span class="p">,</span> <span class="n">acts</span><span class="p">,</span> <span class="n">valid_users</span> <span class="o">=</span> <span class="n">validation_comparison</span><span class="p">(</span><span class="n">df_test</span><span class="p">,</span> <span class="n">k</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[44]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;err:</span><span class="si">{err}</span><span class="s1">&#39;</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">user_id</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">valid_users</span><span class="p">):</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">preds</span><span class="p">[</span><span class="n">idx</span><span class="p">])</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;user:</span><span class="si">{user_id}</span><span class="s1"> </span><span class="se">\t</span><span class="s1"> accuracy:</span><span class="si">{accs[idx]}</span><span class="s1">&#39;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;pred:</span><span class="se">\n</span><span class="si">{preds[idx]}</span><span class="s1">&#39;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;act:</span><span class="se">\n</span><span class="si">{acts[idx]}</span><span class="s1">&#39;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;matches:</span><span class="se">\n</span><span class="si">{matches[idx]}</span><span class="s1">&#39;</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt"></div>
+
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>err:229.0
+user:3024 	 accuracy:0.19230769230769232
+pred:
+[&#39;use deep learning for image classification&#39;, &#39;apache spark lab, part 1: basic concepts&#39;, &#39;predicting churn with the spss random tree algorithm&#39;, &#39;jupyter notebook tutorial&#39;, &#39;python machine learning: scikit-learn tutorial&#39;, &#39;deep learning with tensorflow course by big data university&#39;]
+act:
+[&#39;use deep learning for image classification&#39;, &#39;apache spark lab, part 1: basic concepts&#39;, &#39;visualize car data with brunel&#39;, &#39;apache spark lab, part 3: machine learning&#39;, &#39;welcome to pixiedust&#39;, &#39;insights from new york car accident reports&#39;, &#39;jupyter notebook tutorial&#39;, &#39;python machine learning: scikit-learn tutorial&#39;, &#39;deep learning with tensorflow course by big data university&#39;, &#39;apache spark lab, part 2: querying data&#39;, &#39;using brunel in ipython/jupyter notebooks&#39;, &#39;deep learning trends and an example&#39;, &#39;working interactively with rstudio and notebooks in dsx&#39;, &#39;1357    what i learned implementing a classifier from ...\nName: title, dtype: object&#39;, &#39;learn basics about notebooks and apache spark&#39;, &#39;access ibm analytics for apache spark from rstudio&#39;, &#39;interactive web apps with shiny cheat sheet&#39;, &#39;sector correlations shiny app&#39;, &#39;blogging with brunel&#39;, &#39;machine learning exercises in python, part 1&#39;, &#39;practical tutorial on random forest and parameter tuning in r&#39;, &#39;spark-based machine learning tools for capturing word meanings&#39;, &#39;the machine learning database&#39;, &#39;machine learning for the enterprise.&#39;, &#39;flightpredict ii: the sequel  – ibm watson data lab&#39;, &#39;using machine learning to predict parking difficulty&#39;]
+matches:
+[&#39;use deep learning for image classification&#39;, &#39;apache spark lab, part 1: basic concepts&#39;, &#39;jupyter notebook tutorial&#39;, &#39;python machine learning: scikit-learn tutorial&#39;, &#39;deep learning with tensorflow course by big data university&#39;]
+user:3684 	 accuracy:0.05714285714285714
+pred:
+[&#39;healthcare python streaming application demo&#39;, &#39;use xgboost, scikit-learn &amp; ibm watson machine learning apis&#39;, &#39;insights from new york car accident reports&#39;]
+act:
+[&#39;healthcare python streaming application demo&#39;, &#39;use deep learning for image classification&#39;, &#39;ml optimization using cognitive assistant&#39;, &#39;classify tumors with machine learning&#39;, &#39;apache spark lab, part 1: basic concepts&#39;, &#39;predicting churn with the spss random tree algorithm&#39;, &#39;use xgboost, scikit-learn &amp; ibm watson machine learning apis&#39;, &#39;putting a human face on machine learning&#39;, &#39;gosales transactions for naive bayes model&#39;, &#39;uci ml repository: chronic kidney disease data set&#39;, &#39;apache spark as the new engine of genomics&#39;, &#39;analyze accident reports on amazon emr spark&#39;, &#39;quick guide to build a recommendation engine in python&#39;, &#39;analyzing data by using the sparkling.data library features&#39;, &#39;breast cancer wisconsin (diagnostic) data set&#39;, &#39;use r dataframes &amp; ibm watson natural language understanding&#39;, &#39;deep learning trends and an example&#39;, &#39;deep learning from scratch i: computational graphs&#39;, &#39;working interactively with rstudio and notebooks in dsx&#39;, &#39;data model with streaming analytics and python&#39;, &#39;movie recommender system with spark machine learning&#39;, &#39;deep learning with data science experience&#39;, &#39;learn basics about notebooks and apache spark&#39;, &#39;data science in the cloud&#39;, &#39;improving real-time object detection with yolo&#39;, &#39;real-time sentiment analysis of twitter hashtags with spark (+ pixiedust)&#39;, &#39;access postgresql with python&#39;, &#39;optimization for deep learning highlights in 2017&#39;, &#39;the difference between ai, machine learning, and deep learning?&#39;, &#39;laplace noising versus simulated out of sample methods (cross frames)&#39;, &#39;perform sentiment analysis with lstms, using tensorflow&#39;, &#39;visualize the 1854 london cholera outbreak&#39;, &#39;process events from the watson iot platform in a streams python application&#39;, &#39;generalization in deep learning&#39;, &#39;develop a scala spark model on chicago building violations&#39;]
+matches:
+[&#39;healthcare python streaming application demo&#39;, &#39;use xgboost, scikit-learn &amp; ibm watson machine learning apis&#39;]
+user:3968 	 accuracy:0.05555555555555555
+pred:
+[&#39;insights from new york car accident reports&#39;]
+act:
+[&#39;healthcare python streaming application demo&#39;, &#39;the nurse assignment problem&#39;, &#39;data science for real-time streaming analytics&#39;, &#39;intents &amp; examples for ibm watson conversation&#39;, &#39;access mysql with r&#39;, &#39;insights from new york car accident reports&#39;, &#39;apache spark as the new engine of genomics&#39;, &#39;developing for the ibm streaming analytics service&#39;, &#39;quick guide to build a recommendation engine in python&#39;, &#39;breast cancer wisconsin (diagnostic) data set&#39;, &#39;analyze traffic data from the city of san francisco&#39;, &#39;analyzing streaming data from kafka topics&#39;, &#39;data model with streaming analytics and python&#39;, &#39;variational auto-encoder for &#34;frey faces&#34; using keras&#39;, &#39;build a python app on the streaming analytics service&#39;, &#39;apache spark™ 2.0: extend structured streaming for spark ml&#39;, &#39;ml algorithm != learning machine&#39;, &#39;automating web analytics through python&#39;]
+matches:
+[&#39;insights from new york car accident reports&#39;]
+user:4293 	 accuracy:0.15384615384615385
+pred:
+[&#39;healthcare python streaming application demo&#39;, &#39;predicting churn with the spss random tree algorithm&#39;, &#39;gosales transactions for logistic regression model&#39;, &#39;insights from new york car accident reports&#39;, &#39;total population by country&#39;, &#39;customer demographics and sales&#39;]
+act:
+[&#39;healthcare python streaming application demo&#39;, &#39;use deep learning for image classification&#39;, &#39;visualize data with the matplotlib library&#39;, &#39;classify tumors with machine learning&#39;, &#39;ibm watson facebook posts for 2015&#39;, &#39;visualize car data with brunel&#39;, &#39;analyze open data sets with pandas dataframes&#39;, &#39;intents &amp; examples for ibm watson conversation&#39;, &#39;welcome to pixiedust&#39;, &#39;insights from new york car accident reports&#39;, &#39;analyze open data sets with spark &amp; pixiedust&#39;, &#39;breast cancer wisconsin (diagnostic) data set&#39;, &#39;total population by country&#39;, &#39;data model with streaming analytics and python&#39;, &#39;movie recommender system with spark machine learning&#39;, &#39;programmatic evaluation using watson conversation&#39;, &#39;annual % population growth by country&#39;, &#39;customer demographics and sales&#39;, &#39;united states demographic measures: zip code tabulation areas (zctas)&#39;, &#39;united states demographic measures: population and age&#39;, &#39;employed population by occupation and age&#39;, &#39;access postgresql with r&#39;, &#39;how ibm builds an effective data science team&#39;, &#39;deep learning achievements over the past year &#39;, &#39;aspiring data scientists! start to learn statistics with these 6 books!&#39;, &#39;introducing ibm watson studio &#39;]
+matches:
+[&#39;healthcare python streaming application demo&#39;, &#39;insights from new york car accident reports&#39;, &#39;total population by country&#39;, &#39;customer demographics and sales&#39;]
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
 </div>
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
